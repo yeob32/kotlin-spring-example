@@ -98,7 +98,11 @@ class CompanyServiceTest {
 
         val companies =
             companyService.getCompanyBySearchContextWithPageable(companySearchContext, PageRequest.of(0, 10))
+        val companieNames =
+            companyService.getAllEmployeeNamesBySearchContextWithPageable(companySearchContext, PageRequest.of(0, 10))
 
-        println("size : ${companies.content.size}")
+        println(companieNames)
+        assertThat(companies.content.size).isEqualTo(7)
+        assertThat(companieNames.size).isEqualTo(7)
     }
 }

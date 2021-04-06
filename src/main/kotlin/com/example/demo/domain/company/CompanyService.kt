@@ -2,6 +2,7 @@ package com.example.demo.domain.company
 
 import com.example.demo.domain.company.dto.CompanySearchContext
 import com.example.demo.domain.company.extension.extractEmployeeNames
+import com.example.demo.domain.company.extension.extractEmployeeNamesBySearch
 import com.example.demo.domain.company.specification.CompanySpecs
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -16,6 +17,16 @@ class CompanyService(
     fun getAllEmployeeNames(): List<String> = companyRepository.findAll().extractEmployeeNames()
 
     @Transactional(readOnly = true)
-    fun getCompanyBySearchContextWithPageable(companySearchContext: CompanySearchContext, pageable: Pageable): Page<Company> =
+    fun getCompanyBySearchContextWithPageable(
+        companySearchContext: CompanySearchContext,
+        pageable: Pageable
+    ): Page<Company> =
         companyRepository.findAll(CompanySpecs.searchWith(companySearchContext), pageable)
+
+    @Transactional(readOnly = true)
+    fun getAllEmployeeNamesBySearchContextWithPageable(
+        companySearchContext: CompanySearchContext,
+        pageable: Pageable
+    ): List<String> =
+        companyRepository.findAll(CompanySpecs.searchWith(companySearchContext), pageable).extractEmployeeNamesBySearch()
 }
