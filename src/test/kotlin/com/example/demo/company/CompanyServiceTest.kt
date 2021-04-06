@@ -1,8 +1,10 @@
 package com.example.demo.company
 
 import com.example.demo.domain.company.*
+import com.example.demo.domain.company.dto.CompanyReqDto
+import com.example.demo.domain.company.dto.CompanySearchContext
+import com.example.demo.domain.company.dto.SearchType
 import org.assertj.core.api.Assertions.assertThat
-import org.hibernate.engine.spi.EntityEntryFactory
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -10,8 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.transaction.annotation.Transactional
-import javax.persistence.EntityManager
-import javax.persistence.PersistenceContext
+import java.time.Instant
+import java.time.temporal.ChronoUnit
 
 @Transactional
 @SpringBootTest
@@ -23,9 +25,6 @@ class CompanyServiceTest {
     @Autowired
     lateinit var companyService: CompanyService
 
-    @PersistenceContext
-    lateinit var entityManager: EntityManager
-
     @BeforeEach
     fun init() {
         val companies = mutableListOf<Company>()
@@ -36,8 +35,11 @@ class CompanyServiceTest {
                 address = "address_$i",
                 phone = "phone_$i",
                 email = "email_$i",
-                order = i.toLong()
+                status = if (i % 2 == 0) CompanyStatus.OPEN else CompanyStatus.CLOSE,
+                order = i.toLong(),
+                createdAt = Instant.now().plus(i.toLong(), ChronoUnit.DAYS)
             )
+
             val employee = Employee(name = "employee_$i")
             company.addObject(employee)
 
@@ -79,19 +81,24 @@ class CompanyServiceTest {
         val dto = CompanyReqDto(name = "company%", address = "address_1", phone = "phone_1", email = "email_1")
         val companies =
             companyRepository.findAllBySearchContext(dto, PageRequest.of(0, 10, Sort.Direction.DESC, "order"))
-
         assertThat(companies.content.size).isEqualTo(1)
     }
 
     @Test
-    fun `복잡한쿼리는_em_통해서쿼리`() {
-        val query = """
-            SELECT c 
-            FROM Company c 
-            WHERE c.name = 'company_1'
-        """.trimIndent()
+    fun `복잡한쿼리는_EntityManager,Criteria,QueryDSL을_이용하도록한다_하여_Criteria예제만작성해보자`() {
+        val companySearchContext =
+            CompanySearchContext(
+                searchType = SearchType.ADDRESS,
+                searchKeyword = "address",
+                companyStatus = CompanyStatus.CLOSE,
+                order = 1,
+                startDateTime = Instant.now(),
+                endDateTime = Instant.now().plus(4, ChronoUnit.DAYS)
+            )
 
-        val company = entityManager.createQuery(query, Company::class.java).resultList
-        assertThat(company.size).isEqualTo(1)
+        val companies =
+            companyService.getCompanyBySearchContextWithPageable(companySearchContext, PageRequest.of(0, 10))
+
+        println("size : ${companies.content.size}")
     }
 }

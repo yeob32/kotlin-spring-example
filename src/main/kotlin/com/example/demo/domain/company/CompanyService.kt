@@ -1,21 +1,21 @@
 package com.example.demo.domain.company
 
+import com.example.demo.domain.company.dto.CompanySearchContext
+import com.example.demo.domain.company.extension.extractEmployeeNames
+import com.example.demo.domain.company.specification.CompanySpecs
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
-@Transactional(readOnly = true)
 @Service
 class CompanyService(
-        private val companyRepository: CompanyRepository,
+    private val companyRepository: CompanyRepository,
 ) {
-    fun getAllEmployeeNames(): List<String> {
-        return extractEmployeeNames(companyRepository.findAll())
-    }
+    @Transactional(readOnly = true)
+    fun getAllEmployeeNames(): List<String> = companyRepository.findAll().extractEmployeeNames()
 
-    /**
-     * Lazy Load 를 수행하기 위해 메소드를 별도로 생성
-     */
-    fun extractEmployeeNames(companies: List<Company>): List<String> {
-        return companies.map { it.employees[0].name }
-    }
+    @Transactional(readOnly = true)
+    fun getCompanyBySearchContextWithPageable(companySearchContext: CompanySearchContext, pageable: Pageable): Page<Company> =
+        companyRepository.findAll(CompanySpecs.searchWith(companySearchContext), pageable)
 }
