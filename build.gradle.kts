@@ -25,6 +25,7 @@ allOpen {
     annotation("javax.persistence.MappedSuperclass")
 }
 
+// Hibernate 에서는 인자 없는 디폴트 생성자 필요
 // @Entity 클래스 no arg 플러그인 적용
 noArg {
     annotation("javax.persistence.Entity")
