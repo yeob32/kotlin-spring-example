@@ -5,7 +5,24 @@ plugins {
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     kotlin("jvm") version "1.4.31"
     kotlin("plugin.spring") version "1.4.31"
-    kotlin("plugin.jpa") version "1.4.31"
+    kotlin("plugin.jpa") version "1.4.31" // kotlin("plugin.noarg") 포함
+
+    // Lazy 전략 사용 시 실제 객체 호출 전까지 프록시 객체 참조
+    // 프록시 객체는 Entity 클래스 확장
+    // JPA final class -> 확장 불가능 -> @ManyToOne Lazy 동작 안함
+    // kotlin class -> 기본 final, open 키워드 제공
+    // allopen plugin -> open class 로 바꿔줌
+    kotlin("plugin.allopen") version "1.4.32"
+}
+
+// Only @Entity 클래스
+allOpen {
+    annotation("javax.persistence.Entity")
+}
+
+// @Entity 클래스 no arg 플러그인 적용
+noArg {
+    annotation("javax.persistence.Entity")
 }
 
 group = "com.example"
