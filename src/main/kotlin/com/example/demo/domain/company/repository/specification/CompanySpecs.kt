@@ -1,4 +1,4 @@
-package com.example.demo.domain.company.specification
+package com.example.demo.domain.company.repository.specification
 
 import com.example.demo.domain.company.Company
 import com.example.demo.domain.company.CompanyStatus
@@ -16,12 +16,10 @@ class CompanySpecs {
     companion object {
         fun searchWith(searchContext: CompanySearchContext): Specification<Company> {
             return Specification { root: Root<Company>, query: CriteriaQuery<*>, builder: CriteriaBuilder ->
-                val predicate: List<Predicate> = getPredicateWithKeyword(root, builder, searchContext)
-
                 query.where(
                     builder.or(
                         builder.and(
-                            *predicate.toTypedArray(),
+                            *getPredicateWithKeyword(root, builder, searchContext).toTypedArray(),
                             getPredicateWithCreatedAtBetween(root, builder, searchContext),
                         ),
                         builder.and(getPredicateWithCompanyStatus(root, builder, searchContext))

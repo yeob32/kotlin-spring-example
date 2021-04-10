@@ -13,12 +13,12 @@ class Employee() {
 
     @Column(name = "name")
     lateinit var name: String
-        private set
+        protected set
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_no")
     lateinit var company: Company
-        private set
+        protected set
 
     constructor(name: String) : this() {
         this.name = name

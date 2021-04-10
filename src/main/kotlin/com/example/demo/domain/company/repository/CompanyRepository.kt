@@ -1,5 +1,7 @@
-package com.example.demo.domain.company
+package com.example.demo.domain.company.repository
 
+import com.example.demo.domain.company.Company
+import com.example.demo.domain.company.custom.CustomCompanyRepository
 import com.example.demo.domain.company.dto.CompanyReqDto
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -8,7 +10,7 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor
 
-interface CompanyRepository : JpaRepository<Company, Long>, JpaSpecificationExecutor<Company> {
+interface CompanyRepository : JpaRepository<Company, Long>, JpaSpecificationExecutor<Company>, CustomCompanyRepository {
 
     fun findAllByAddressEquals(address: String, pageable: Pageable): Page<Company>
     fun findAllByAddressLike(address: String, pageable: Pageable): Page<Company>

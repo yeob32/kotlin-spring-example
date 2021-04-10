@@ -13,31 +13,31 @@ class Company() {
 
     @Column(name = "name")
     lateinit var name: String
-        private set
+        protected set
 
     @Column(name = "address")
     lateinit var address: String
-        private set
+        protected set
 
     @Column(name = "phone")
     lateinit var phone: String
-        private set
+        protected set
 
     @Column(name = "email")
     lateinit var email: String
-        private set
+        protected set
 
     @Column(name = "status")
     lateinit var status: CompanyStatus
-        private set
+        protected set
 
     @Column(name = "order_no")
     var order: Long = 0
-        private set
+        protected set
 
     @Column(name = "created_at")
     lateinit var createdAt: Instant
-        private set
+        protected set
 
     @OneToMany(mappedBy = "company", cascade = [CascadeType.ALL])
     var employees: MutableList<Employee> = mutableListOf()
@@ -61,6 +61,39 @@ class Company() {
         employee.updateCompany(this)
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Company
+
+        if (id != other.id) return false
+        if (name != other.name) return false
+        if (address != other.address) return false
+        if (phone != other.phone) return false
+        if (email != other.email) return false
+        if (status != other.status) return false
+        if (order != other.order) return false
+        if (createdAt != other.createdAt) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = id.hashCode()
+        result = 31 * result + name.hashCode()
+        result = 31 * result + address.hashCode()
+        result = 31 * result + phone.hashCode()
+        result = 31 * result + email.hashCode()
+        result = 31 * result + status.hashCode()
+        result = 31 * result + order.hashCode()
+        result = 31 * result + createdAt.hashCode()
+        return result
+    }
+
+    override fun toString(): String {
+        return "Company(id=$id, name='$name', address='$address', phone='$phone', email='$email', status=$status, order=$order, createdAt=$createdAt"
+    }
 
 
 }

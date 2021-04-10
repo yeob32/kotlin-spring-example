@@ -1,9 +1,11 @@
 package com.example.demo.company
 
 import com.example.demo.domain.company.*
+import com.example.demo.domain.company.custom.CustomCompanyRepository
 import com.example.demo.domain.company.dto.CompanyReqDto
 import com.example.demo.domain.company.dto.CompanySearchContext
 import com.example.demo.domain.company.dto.SearchType
+import com.example.demo.domain.company.repository.CompanyRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -16,6 +18,8 @@ import java.time.Instant
 import java.time.temporal.ChronoUnit
 
 @Transactional
+// @BeforeEach 랑 @Test 랑 같은 트랜잭션으로 묶여서 테스트 정확하지 않음
+// @OneToMany 테스트 시에는 @Transactional 필요함
 @SpringBootTest
 class CompanyServiceTest {
 
@@ -86,23 +90,37 @@ class CompanyServiceTest {
 
     @Test
     fun `복잡한쿼리는_EntityManager,Criteria,QueryDSL을_이용하도록한다_하여_Criteria예제만작성해보자`() {
-        val companySearchContext =
-            CompanySearchContext(
-                searchType = SearchType.ADDRESS,
-                searchKeyword = "address",
-                companyStatus = CompanyStatus.CLOSE,
-                order = 1,
-                startDateTime = Instant.now(),
-                endDateTime = Instant.now().plus(4, ChronoUnit.DAYS)
-            )
+        val companySearchContext = getCompanySearchContext()
 
         val companies =
             companyService.getCompanyBySearchContextWithPageable(companySearchContext, PageRequest.of(0, 10))
         val companieNames =
             companyService.getAllEmployeeNamesBySearchContextWithPageable(companySearchContext, PageRequest.of(0, 10))
 
+        println(companies)
         println(companieNames)
         assertThat(companies.content.size).isEqualTo(7)
         assertThat(companieNames.size).isEqualTo(7)
     }
+
+    @Test
+    fun `귀찮았지만_QueryDSL예제작성한다`() {
+        val companySearchContext = getCompanySearchContext()
+        val companies = companyRepository.search(companySearchContext, PageRequest.of(0, 10))
+        val companieNames = companyService.getAllEmployeeNamesWithQueryDSL(companySearchContext, PageRequest.of(0, 10))
+
+        println(companies)
+        println(companieNames)
+        assertThat(companies.content.size).isEqualTo(7)
+        assertThat(companieNames.size).isEqualTo(7)
+    }
+
+    fun getCompanySearchContext() = CompanySearchContext(
+        searchType = SearchType.ADDRESS,
+        searchKeyword = "address",
+        companyStatus = CompanyStatus.CLOSE,
+        order = 1,
+        startDateTime = Instant.now(),
+        endDateTime = Instant.now().plus(4, ChronoUnit.DAYS)
+    )
 }

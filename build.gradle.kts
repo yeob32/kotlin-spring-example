@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
 
 plugins {
     id("org.springframework.boot") version "2.4.4"
@@ -16,6 +17,7 @@ plugins {
     // 프로퍼티와 함수에도 open 키워드가 필요하다.
     // https://spring.io/guides/tutorials/spring-boot-kotlin/ 해당 문서에서는 allopen 플로그인 사용 권장하고 있음
     kotlin("plugin.allopen") version "1.4.32"
+    kotlin("kapt") version "1.4.10" // annotation processing을 위한 kapt
 }
 
 // Only @Entity 클래스
@@ -49,6 +51,16 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-web")
+
+
+    // spring 이랑 dependency 안맞으면 에러남 java.lang.UnsupportedOperationException
+    api("com.querydsl:querydsl-jpa")
+    // kapt로 dependency를 지정해 준다.
+    // kotlin 코드가 아니라면 kapt 대신 annotationProcessor를 사용한다.
+    kapt("com.querydsl:querydsl-apt::jpa")
+
+    annotationProcessor(group = "com.querydsl", name = "querydsl-apt", classifier = "jpa")
+
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
@@ -68,4 +80,8 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+sourceSets["main"].withConvention(org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet::class){
+    kotlin.srcDir("$buildDir/generated/source/kapt/main")
 }
