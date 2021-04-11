@@ -15,9 +15,8 @@ class CompanyController(private val companyService: CompanyService) {
         companySearchContext: CompanySearchContext,
         @RequestParam(value = "page", defaultValue = 0.toString()) page: Int,
         @RequestParam("pageSize", defaultValue = 10.toString()) pageSize: Int
-    ) = companyService.getAllEmployeeNamesBySearchContextWithPageable(
+    ) = companyService.getCompanyWithJPAQueryFactory(
         companySearchContext,
         PageRequest.of(page, pageSize)
     )
-
 }

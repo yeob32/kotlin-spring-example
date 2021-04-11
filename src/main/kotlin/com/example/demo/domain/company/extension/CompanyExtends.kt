@@ -1,7 +1,6 @@
 package com.example.demo.domain.company.extension
 
 import com.example.demo.domain.company.Company
-import com.example.demo.domain.company.dto.CompanyResDto
 import org.springframework.data.domain.Page
 
 /**

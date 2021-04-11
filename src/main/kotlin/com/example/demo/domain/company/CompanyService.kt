@@ -1,5 +1,6 @@
 package com.example.demo.domain.company
 
+import com.example.demo.domain.company.dto.CompanyResDto
 import com.example.demo.domain.company.dto.CompanySearchContext
 import com.example.demo.domain.company.extension.extractEmployeeNames
 import com.example.demo.domain.company.extension.extractEmployeeNamesBySearch
@@ -38,4 +39,10 @@ class CompanyService(
         pageable: Pageable
     ): List<String> =
         companyRepository.search(companySearchContext, pageable).extractEmployeeNamesBySearch()
+
+    @Transactional(readOnly = true)
+    fun getCompanyWithJPAQueryFactory(
+        companySearchContext: CompanySearchContext,
+        pageable: Pageable
+    ): Page<CompanyResDto> = companyRepository.searchWithJPAQueryFactory(companySearchContext, pageable)
 }
