@@ -7,4 +7,5 @@ import org.springframework.data.domain.Pageable
 
 interface CustomCompanyRepository {
     fun search(search: CompanySearchContext, pageable: Pageable): Page<Company>
+    fun searchWithJPAQueryFactory(search: CompanySearchContext, pageable: Pageable): Page<Company>
 }
