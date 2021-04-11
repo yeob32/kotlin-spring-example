@@ -104,15 +104,24 @@ class CompanyServiceTest {
     }
 
     @Test
-    fun `귀찮았지만_QueryDSL예제작성한다`() {
+    fun `귀찮지만_QueryDSL예제작성한다`() {
         val companySearchContext = getCompanySearchContext()
         val companies = companyRepository.search(companySearchContext, PageRequest.of(0, 10))
         val companieNames = companyService.getAllEmployeeNamesWithQueryDSL(companySearchContext, PageRequest.of(0, 10))
 
-        println(companies)
+        companies.forEach { println(it) }
         println(companieNames)
         assertThat(companies.content.size).isEqualTo(7)
         assertThat(companieNames.size).isEqualTo(7)
+    }
+
+    @Test
+    fun `이왕하는거@QueryProjection테스트까지해보자`() {
+        val companySearchContext = getCompanySearchContext()
+        val companies = companyRepository.searchWithJPAQueryFactory(companySearchContext, PageRequest.of(0, 10))
+
+        companies.forEach { println(it) }
+        assertThat(companies.content.size).isEqualTo(7)
     }
 
     fun getCompanySearchContext() = CompanySearchContext(

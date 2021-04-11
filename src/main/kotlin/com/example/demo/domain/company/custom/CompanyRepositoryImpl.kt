@@ -3,7 +3,9 @@ package com.example.demo.domain.company.custom
 import com.example.demo.domain.company.Company
 import com.example.demo.domain.company.CompanyStatus
 import com.example.demo.domain.company.QCompany.company
+import com.example.demo.domain.company.dto.CompanyResDto
 import com.example.demo.domain.company.dto.CompanySearchContext
+import com.example.demo.domain.company.dto.QCompanyResDto
 import com.example.demo.domain.company.dto.SearchType
 import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.jpa.JPQLQuery
@@ -35,8 +37,9 @@ class CompanyRepositoryImpl(private val jpaQueryFactory: JPAQueryFactory) :
         return PageImpl(companies, pageable, jpaQuery.fetchCount())
     }
 
-    override fun searchWithJPAQueryFactory(search: CompanySearchContext, pageable: Pageable) : Page<Company> {
-        val result = jpaQueryFactory.selectFrom(company)
+    override fun searchWithJPAQueryFactory(search: CompanySearchContext, pageable: Pageable) : Page<CompanyResDto> {
+        val result = jpaQueryFactory.select(QCompanyResDto(company.name, company.email))
+            .from(company)
             .where(
                 eqStatus(search.companyStatus)?.or(
                     searchKeyword(
@@ -48,6 +51,7 @@ class CompanyRepositoryImpl(private val jpaQueryFactory: JPAQueryFactory) :
             .offset(pageable.offset)
             .limit(pageable.pageSize.toLong())
             .fetchResults()
+
         return PageImpl(result.results, pageable, result.total)
     }
 

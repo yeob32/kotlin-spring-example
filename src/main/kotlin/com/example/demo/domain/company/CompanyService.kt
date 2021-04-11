@@ -29,7 +29,8 @@ class CompanyService(
         companySearchContext: CompanySearchContext,
         pageable: Pageable
     ): List<String> =
-        companyRepository.findAll(CompanySpecs.searchWith(companySearchContext), pageable).extractEmployeeNamesBySearch()
+        companyRepository.findAll(CompanySpecs.searchWith(companySearchContext), pageable)
+            .extractEmployeeNamesBySearch()
 
     @Transactional(readOnly = true)
     fun getAllEmployeeNamesWithQueryDSL(
