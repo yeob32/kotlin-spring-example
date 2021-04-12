@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import java.lang.RuntimeException
 
 @RestController
 class CompanyController(private val companyService: CompanyService) {
@@ -27,6 +28,12 @@ class CompanyController(private val companyService: CompanyService) {
     fun exception400() {
         logger.info("test log !!!!!!!!!!")
         companyService.getException()
+    }
+
+    @GetMapping("/api/4xx")
+    fun exception4xx() {
+        logger.info("test400 log !!!!!!!!!!")
+        throw RuntimeException("@@@@@@")
     }
 
     @GetMapping("/api/500")

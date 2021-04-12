@@ -13,14 +13,14 @@ class GlobalCustomExceptionHandler {
         val log: Logger = LoggerFactory.getLogger(this::class.java)
     }
 
-//    @ExceptionHandler(BusinessException::class)
+    @ExceptionHandler(BusinessException::class)
     protected fun handleBusinessException(e: BusinessException): ResponseEntity<ErrorResponse> {
         log.error("handleBusinessException : ", e)
         val errorCode = e.errorCode
         return ResponseEntity(ErrorResponse(errorCode), HttpStatus.valueOf(errorCode.status))
     }
 
-//    @ExceptionHandler(Exception::class)
+    @ExceptionHandler(Exception::class)
     protected fun handleException(e: Exception): ResponseEntity<ErrorResponse> {
         log.error("handleException : ", e)
         val errorResponse = ErrorResponse(ErrorCode.INTERNAL_SERVER_ERROR)
