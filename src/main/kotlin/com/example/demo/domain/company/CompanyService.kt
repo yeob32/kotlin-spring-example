@@ -6,10 +6,13 @@ import com.example.demo.domain.company.extension.extractEmployeeNames
 import com.example.demo.domain.company.extension.extractEmployeeNamesBySearch
 import com.example.demo.domain.company.repository.CompanyRepository
 import com.example.demo.domain.company.repository.specification.CompanySpecs
+import com.example.demo.global.error.InvalidValueException
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.lang.RuntimeException
+import java.time.Instant
 
 @Service
 class CompanyService(
@@ -45,4 +48,30 @@ class CompanyService(
         companySearchContext: CompanySearchContext,
         pageable: Pageable
     ): Page<CompanyResDto> = companyRepository.searchWithJPAQueryFactory(companySearchContext, pageable)
+
+    // 기본적으로 RuntimeException 발생 시 롤백 동작
+//    @Transactional(rollbackFor = [RuntimeException::class])
+//    @Transactional(rollbackFor = [Exception::class])
+    fun getException() {
+        try {
+            companyRepository.save(
+                Company(
+                    name = "test_company!",
+                    address = "test_adress!",
+                    phone = "test_company!",
+                    email = "test_email!",
+                    status = CompanyStatus.OPEN,
+                    order = 1,
+                    createdAt = Instant.now()
+                )
+            )
+
+            println("save company!!!!!!!")
+            throw Exception("companyService Exception")
+//            throw InvalidValueException("companyService InvalidValueException")
+        } catch (e: Exception) {
+            println("Error !!!!!!! : ${e.message}")
+            throw e
+        }
+    }
 }
