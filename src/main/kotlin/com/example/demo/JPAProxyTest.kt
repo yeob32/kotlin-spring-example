@@ -1,4 +1,4 @@
-package com.example.demo.domain.company
+package com.example.demo
 
 import com.fasterxml.jackson.annotation.JsonBackReference
 import com.fasterxml.jackson.annotation.JsonManagedReference
@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
+import java.lang.RuntimeException
 import javax.persistence.*
 
 @Entity
@@ -118,6 +119,15 @@ class MoneyService(
     fun getTotalPrice(): MoneyPriceResDto = MoneyPriceResDto(personRepository.findAll().sumOf {
         it.moneys.sumOf { money -> money.price }
     })
+
+    @Transactional
+    fun updatePersonName() {
+        personRepository.findById(1)
+            .orElseThrow { throw RuntimeException("") }
+            .apply {
+                name = "aaaaaaaaaaaaaaa"
+            }
+    }
 }
 
 data class PersonNamesResDto(
@@ -142,6 +152,9 @@ class PersonController(private val moneyService: MoneyService) {
 
     @GetMapping("/test4")
     fun test4() = moneyService.getTotalPrice()
+
+    @GetMapping("/test5")
+    fun test5() = moneyService.updatePersonName()
 }
 
 @Component
