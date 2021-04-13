@@ -52,7 +52,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-web")
 
-
     // spring 이랑 dependency 안맞으면 에러남 java.lang.UnsupportedOperationException
     api("com.querydsl:querydsl-jpa")
     // kapt로 dependency를 지정해 준다.
@@ -60,6 +59,11 @@ dependencies {
     kapt("com.querydsl:querydsl-apt::jpa")
 
     annotationProcessor(group = "com.querydsl", name = "querydsl-apt", classifier = "jpa")
+
+    implementation("org.mapstruct:mapstruct:1.4.2.Final")
+    kapt("org.mapstruct:mapstruct-processor:1.4.2.Final")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3")
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
