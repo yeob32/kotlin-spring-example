@@ -1,8 +1,6 @@
 package com.example.demo.company
 
 import com.example.demo.domain.company.*
-import com.example.demo.domain.company.dto.CompanySearchContext
-import com.example.demo.domain.company.dto.SearchType
 import com.example.demo.domain.company.repository.CompanyRepository
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -10,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
@@ -74,13 +71,4 @@ class CompanyTest(
 
         companyRepository.saveAll(companies)
     }
-
-    val companySearchContext = CompanySearchContext(
-        searchType = SearchType.ADDRESS,
-        searchKeyword = "address",
-        companyStatus = CompanyStatus.CLOSE,
-        order = 1,
-        startDateTime = Instant.now(),
-        endDateTime = Instant.now().plus(4, ChronoUnit.DAYS)
-    )
 }

@@ -3,10 +3,9 @@ package com.example.demo.domain.company.custom
 import com.example.demo.domain.company.Company
 import com.example.demo.domain.company.CompanyStatus
 import com.example.demo.domain.company.QCompany.company
-import com.example.demo.domain.company.dto.CompanyResDto
-import com.example.demo.domain.company.dto.CompanySearchContext
-import com.example.demo.domain.company.dto.QCompanyResDto
-import com.example.demo.domain.company.dto.SearchType
+import com.example.demo.domain.company.QEmployee.employee
+import com.example.demo.domain.company.dto.*
+import com.querydsl.core.types.Predicate
 import com.querydsl.core.types.dsl.BooleanExpression
 import com.querydsl.jpa.JPQLQuery
 import com.querydsl.jpa.impl.JPAQueryFactory
@@ -16,6 +15,7 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 import org.springframework.stereotype.Repository
 import java.time.Instant
+import java.time.temporal.ChronoUnit
 
 @Repository
 class CompanyRepositoryImpl(private val jpaQueryFactory: JPAQueryFactory) :
@@ -37,7 +37,7 @@ class CompanyRepositoryImpl(private val jpaQueryFactory: JPAQueryFactory) :
         return PageImpl(companies, pageable, jpaQuery.fetchCount())
     }
 
-    override fun searchWithJPAQueryFactory(search: CompanySearchContext, pageable: Pageable) : Page<CompanyResDto> {
+    override fun searchWithJPAQueryFactory(search: CompanySearchContext, pageable: Pageable): Page<CompanyResDto> {
         val result = jpaQueryFactory.select(QCompanyResDto(company.name, company.email))
             .from(company)
             .where(
@@ -53,6 +53,38 @@ class CompanyRepositoryImpl(private val jpaQueryFactory: JPAQueryFactory) :
             .fetchResults()
 
         return PageImpl(result.results, pageable, result.total)
+    }
+
+    override fun findAllCompanyWithEmployee(): List<CompanyWithEmployeeResDto> {
+        return jpaQueryFactory.select(QCompanyWithEmployeeResDto(company.name, company.email, employee.name))
+            .from(company)
+            .leftJoin(company.employees, employee)
+            .fetch()
+    }
+
+    override fun findAllCompany(): List<Company> {
+        return jpaQueryFactory.select(company)
+            .from(company)
+            .leftJoin(company.employees, employee)
+            .where(
+                company.name.eq("asdf")
+                    .andAnyOf(*changedCondition())
+                    .andAnyOf(*changedCondition())
+            )
+            .fetch()
+    }
+
+    private fun changedCondition(): Array<Predicate> {
+        val expressions = arrayListOf<Predicate>()
+        expressions.add(company.email.eq("zxcv"))
+        expressions.add(company.address.eq("zxcv"))
+        expressions.add(
+            company.createdAt.between(
+                Instant.now().minus(1, ChronoUnit.DAYS),
+                Instant.now().plus(1, ChronoUnit.DAYS)
+            )
+        )
+        return expressions.toTypedArray()
     }
 
     private fun searchKeyword(type: SearchType, keyword: String?): BooleanExpression? = keyword?.let {
