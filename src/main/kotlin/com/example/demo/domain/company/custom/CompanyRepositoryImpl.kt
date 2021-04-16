@@ -58,7 +58,7 @@ class CompanyRepositoryImpl(private val jpaQueryFactory: JPAQueryFactory) :
     override fun findAllCompanyWithEmployee(): List<CompanyWithEmployeeResDto> {
         return jpaQueryFactory.select(QCompanyWithEmployeeResDto(company.name, company.email, employee.name))
             .from(company)
-            .leftJoin(company.employees, employee)
+            .innerJoin(company.employees, employee)
             .fetch()
     }
 
