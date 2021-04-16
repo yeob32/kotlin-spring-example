@@ -20,6 +20,7 @@ class GlobalCustomExceptionHandler {
         return ResponseEntity(ErrorResponse(errorCode), HttpStatus.valueOf(errorCode.status))
     }
 
+    // 움...이거는 좀 고민해보자
     @ExceptionHandler(Exception::class)
     protected fun handleException(e: Exception): ResponseEntity<ErrorResponse> {
         log.error("handleException : ", e)
