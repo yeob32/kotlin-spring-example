@@ -1,7 +1,9 @@
 package com.example.demo.domain.company
 
 import com.example.demo.domain.company.dto.CompanySearchContext
+import com.example.demo.global.error.ErrorCode
 import com.example.demo.global.error.InvalidValueException
+import com.example.demo.global.error.NotFoundOrderException
 import com.example.demo.logger.Log
 import org.springframework.data.domain.PageRequest
 import org.springframework.web.bind.annotation.GetMapping
@@ -23,6 +25,11 @@ class CompanyController(private val companyService: CompanyService) {
         companySearchContext,
         PageRequest.of(page, pageSize)
     )
+
+    @GetMapping("/api/exception")
+    fun exception() {
+        throw NotFoundOrderException("test", ErrorCode.NOT_FOUND_ORDER)
+    }
 
     @GetMapping("/api/400")
     fun exception400() {
