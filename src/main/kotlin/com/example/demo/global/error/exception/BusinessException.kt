@@ -1,5 +1,6 @@
-package com.example.demo.global.error
+package com.example.demo.global.error.exception
 
+import com.example.demo.global.error.ErrorCode
 import java.lang.RuntimeException
 
 open class BusinessException : RuntimeException {

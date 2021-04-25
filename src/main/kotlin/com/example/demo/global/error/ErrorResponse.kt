@@ -1,6 +1,8 @@
 package com.example.demo.global.error
 
-data class ErrorResponse constructor(
+import org.springframework.http.HttpStatus
+
+open class ErrorResponse constructor(
     var status: Int,
     var code: String,
     var message: String
@@ -10,6 +12,8 @@ data class ErrorResponse constructor(
         this.code = errorCode.code
         this.message = errorCode.message
     }
+
+    val httpStatus = HttpStatus.valueOf(this.status)
 }
 
 fun main() {
