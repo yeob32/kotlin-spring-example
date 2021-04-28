@@ -15,12 +15,12 @@ import org.springframework.context.annotation.Import
 @Import(TestConfig::class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @DataJpaTest
-class UserRepositoryTest {
+class UserRepositoryTest(
+    @Autowired
+    val userRepository: UserRepository
+) {
 
     private val user: User = User(email = Email("yeob32@gmail.com"), name = "ksy", password = Password("1234"))
-
-    @Autowired
-    lateinit var userRepository: UserRepository
 
     @Test
     fun `create_user_test`() {
