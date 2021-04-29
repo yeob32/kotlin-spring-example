@@ -36,4 +36,13 @@ class CompanyRepositoryTest: CompanyRepositoryIntegrationTest() {
     fun `QueryDSL_and_or_조건절_테스트`() {
         val companies = companyRepository.searchWithJPAQueryFactory(companySearchContext, PageRequest.of(0, 10))
     }
+
+    @Test
+    fun `getOne_쿼리_캐시_테스트`() {
+        val company1 = companyRepository.getOne(1)
+        val company2 = companyRepository.getOne(1)
+
+        println(company1)
+        println(company2)
+    }
 }

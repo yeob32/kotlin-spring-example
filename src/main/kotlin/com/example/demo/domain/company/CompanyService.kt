@@ -6,12 +6,10 @@ import com.example.demo.domain.company.extension.extractEmployeeNames
 import com.example.demo.domain.company.extension.extractEmployeeNamesBySearch
 import com.example.demo.domain.company.repository.CompanyRepository
 import com.example.demo.domain.company.repository.specification.CompanySpecs
-import com.example.demo.global.error.InvalidValueException
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.lang.RuntimeException
 import java.time.Instant
 
 @Service

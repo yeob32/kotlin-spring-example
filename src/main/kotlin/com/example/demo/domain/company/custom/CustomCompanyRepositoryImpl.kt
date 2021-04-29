@@ -18,7 +18,7 @@ import java.time.Instant
 import java.time.temporal.ChronoUnit
 
 @Repository
-class CompanyRepositoryImpl(private val jpaQueryFactory: JPAQueryFactory) :
+class CustomCompanyRepositoryImpl(private val jpaQueryFactory: JPAQueryFactory) :
     QuerydslRepositorySupport(Company::class.java), CustomCompanyRepository {
 
     override fun search(search: CompanySearchContext, pageable: Pageable): Page<Company> {
