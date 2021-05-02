@@ -1,7 +1,9 @@
 package com.example.demo.domain.user.dto
 
+import com.example.demo.domain.user.model.Email
+
 data class UserResDto(
-        var id: Long,
-        var email: String,
-        var name: String,
+    var id: Long,
+    var email: Email,
+    var name: String,
 )

@@ -25,7 +25,8 @@ class UserServiceTest {
     private lateinit var userService: UserService
 
     private lateinit var user: User
-    private val userSignUpReqDto: UserSignUpReqDto = UserSignUpReqDto(email = "yeob32@gmail.com", name = "ksy", password = "1234")
+    private val userSignUpReqDto: UserSignUpReqDto =
+        UserSignUpReqDto(email = "yeob32@gmail.com", name = "ksy", password = "1234")
 
     @BeforeEach
     fun init() {
