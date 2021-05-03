@@ -17,7 +17,7 @@ class UserService(
 ) {
 
     @Transactional(readOnly = true)
-    fun getUsers(): Iterable<UserResDto> = userRepository.findAll().toResDto()
+    fun getUsers(): List<UserResDto> = userRepository.findAll().toResDto()
 
     @Transactional(readOnly = true)
     fun getUser(id: Long): User = userRepository.findById(id)

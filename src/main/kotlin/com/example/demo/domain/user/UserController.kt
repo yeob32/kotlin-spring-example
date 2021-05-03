@@ -11,6 +11,9 @@ class UserController(private val userService: UserService) {
     @GetMapping(value = ["/api/users"])
     fun getUsers() = ResponseEntity.ok(userService.getUsers())
 
+    @GetMapping(value = ["/api/users/{id}"])
+    fun getUser(@PathVariable id: Long) = ResponseEntity.ok(userService.getUser(id))
+
     @PostMapping(value = ["/api/users"])
     fun createUser(@RequestBody userSignUpReqDto: UserSignUpReqDto) = userService.createUser(userSignUpReqDto)
 
