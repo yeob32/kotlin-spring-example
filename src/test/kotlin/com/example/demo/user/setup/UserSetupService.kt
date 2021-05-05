@@ -1,4 +1,4 @@
-package com.example.demo.user
+package com.example.demo.user.setup
 
 import com.example.demo.domain.user.User
 import com.example.demo.domain.user.UserRepository
@@ -7,7 +7,7 @@ import com.example.demo.domain.user.model.Password
 import org.springframework.stereotype.Component
 
 @Component
-class UserGenerateService(private val userRepository: UserRepository) {
+class UserSetupService(private val userRepository: UserRepository) {
 
     fun save() = userRepository.save(getUser())
     fun save(count: Int) {
