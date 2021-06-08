@@ -1,8 +1,11 @@
 spring:
+  profiles:
+    active: local
+
   datasource:
     hikari:
       jdbc-url: jdbc:mysql://localhost:3306/playground?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=UTC
-      username: ksy
+      username: ksy-repl
       password: 1234
       driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
@@ -14,4 +17,10 @@ spring:
       hibernate.format_sql: true
       hibernate.use_sql_comments: true
     open-in-view: false
+
+server:
+  tomcat:
+    threads:
+      max: 10
+
 

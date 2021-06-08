@@ -86,6 +86,10 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
+springBoot {
+    mainClassName = "com.example.demo.DemoApplicationKt"
+}
+
 //sourceSets["main"].withConvention(org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet::class){
 //    kotlin.srcDir("$buildDir/generated/source/kapt/main")
 //}
