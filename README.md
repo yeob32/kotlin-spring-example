@@ -18,8 +18,8 @@ $ ./gradlew clean && ./gradlew build -x test && java -jar build/libs/demo-0.0.1-
 
 ### Docker build
 ```shell
-$ docker build --build-arg JAR_FILE=build/libs/\*.jar -t yeob32/kotlin-spring-example .
-$ docker build -t yeob32/kotlin-spring-example .
+$ docker build --build-arg JAR_FILE=build/libs/\*.jar -t app .
+$ docker build -t app .
 ```
 ###
 ```shell
@@ -33,6 +33,7 @@ $ docker network inspect referring
 
 ### Docker run
 ```shell
+$ docker run --name application -e "SPRING_PROFILES_ACTIVE=local" -p 8080:8080 app
 $ docker run -d --name application -e "SPRING_PROFILES_ACTIVE=local" -p 8080:8080 --network referring --link mysql-master yeob32/kotlin-spring-example
 $ docker run --name application -e "SPRING_PROFILES_ACTIVE=local" -p 8080:8080 --network referring --link mysql-master:mysql-master yeob32/kotlin-spring-example
 ```
