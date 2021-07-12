@@ -1,7 +1,9 @@
 spring:
-  profiles:
-    active: h2
-
+  application:
+    name: h2-service
+  config:
+    activate:
+      on-profile: h2
   datasource:
     hikari:
       jdbc-url: jdbc:h2:./example
