@@ -51,6 +51,27 @@ springBoot {
 }
 ```
 
+### application.yaml 마이그레이션 이슈
+```shell
+18:59:06.534 [main] ERROR org.springframework.boot.SpringApplication - Application run failed
+org.springframework.boot.context.config.InvalidConfigDataPropertyException: Property 'spring.profiles.active' imported from location 'class path resource [application-h2.yml]' is invalid in a profile specific resource [origin: class path resource [application-h2.yml] - 3:13]
+	at org.springframework.boot.context.config.InvalidConfigDataPropertyException.lambda$throwOrWarn$1(InvalidConfigDataPropertyException.java:124)
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75)
+	at java.base/java.util.Collections$UnmodifiableCollection.forEach(Collections.java:1083)
+```
+
+````yaml
+spring:
+  profiles:
+    active: h2
+
+## 2.4 이후
+spring:
+  config:
+    activate:
+      on-profile: h2
+````
+
 
 ### Reference
 - https://spring.io/guides/gs/spring-boot-docker/
